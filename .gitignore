@@ -26,3 +26,5 @@ Thumbs.db
 
 # Logs
 *.log
+# Local prediction history
+prediction_history.csv
