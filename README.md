@@ -4,7 +4,7 @@ EstateIQ is a machine learning web application that estimates district-level med
 
 ## Features
 
-- Predict estimated housing values from eight input features.
+- Predict estimated housing values using eight input features.
 - Train and compare five regression algorithms.
 - Evaluate models using MAE, MSE, RMSE, and R².
 - Visualize model performance using interactive charts.
@@ -12,22 +12,31 @@ EstateIQ is a machine learning web application that estimates district-level med
 
 ## Tech Stack
 
-- Python
-- Flask
-- scikit-learn
-- Pandas and NumPy
-- HTML, CSS, and JavaScript
-- Chart.js
+- **Programming Language:** Python
+- **Machine Learning:** scikit-learn
+- **Data Processing:** Pandas, NumPy
+- **Backend:** Flask
+- **Frontend:** HTML, CSS, JavaScript
+- **Visualization:** Chart.js
 
 ## Dataset
 
-This project uses the California Housing dataset available through scikit-learn. It contains 20,640 district-level observations and eight numerical features, including median income, housing age, room statistics, population, occupancy, latitude, and longitude.
+This project uses the California Housing dataset available through scikit-learn. It contains 20,640 district-level observations and eight numerical features:
 
-The target represents historical district-level median house values. Predictions are estimates, not verified current market prices for individual properties.
+- Median income
+- Housing age
+- Average rooms
+- Average bedrooms
+- Population
+- Average occupancy
+- Latitude
+- Longitude
 
-## Models
+The target represents historical district-level median house values. Predictions are estimates and should not be treated as verified current market prices for individual properties.
 
-The training workflow compares:
+## Machine Learning Models
+
+The training workflow compares the following regression algorithms:
 
 1. Linear Regression
 2. Ridge Regression
@@ -35,51 +44,18 @@ The training workflow compares:
 4. Random Forest Regression
 5. Gradient Boosting Regression
 
-The selected model is evaluated on held-out test data.
+The selected model is chosen using validation performance and evaluated on held-out test data.
 
 ## Evaluation Metrics
 
-- **MAE:** Mean Absolute Error
-- **MSE:** Mean Squared Error
-- **RMSE:** Root Mean Squared Error
-- **R²:** Coefficient of Determination
+The project uses the following metrics to evaluate model performance:
 
-See `validation_results.csv` and `final_test_results.csv` for recorded results.
+- **MAE (Mean Absolute Error):** Average absolute difference between actual and predicted values.
+- **MSE (Mean Squared Error):** Average of squared prediction errors.
+- **RMSE (Root Mean Squared Error):** Square root of the mean squared error.
+- **R² Score:** Measures how much variation in the target is explained by the model.
 
-## Run Locally
-
-Clone the repository:
-
-```bash
-git clone https://github.com/Gaurav-coder-tech/ml-house-predictor.git
-cd ml-house-predictor
-```
-
-Create a virtual environment:
-
-```bash
-python -m venv .venv
-```
-
-Activate it in Windows PowerShell:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Start the application:
-
-```bash
-python app.py
-```
-
-Open the local URL printed by Flask, usually `http://127.0.0.1:5000`.
+The recorded results are available in `validation_results.csv` and `final_test_results.csv`.
 
 ## Project Structure
 
@@ -92,20 +68,71 @@ ml-house-predictor/
 ├── validation_results.csv
 ├── final_test_results.csv
 ├── test_predictions.csv
+├── .gitignore
+├── README.md
 └── templates/
     └── index.html
 ```
 
+## Installation and Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Gaurav-coder-tech/ml-house-predictor.git
+cd ml-house-predictor
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+### 3. Activate the virtual environment
+
+For Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Run the application
+
+```bash
+python app.py
+```
+
+Open the local URL printed in the terminal, usually:
+
+`http://127.0.0.1:5000`
+
 ## Limitations
 
-- The dataset represents historical housing values.
-- Predictions are district-level estimates, not exact individual property valuations.
-- Historical test performance does not guarantee accuracy in today's housing market.
-- Prediction history is currently CSV-based and is not yet isolated by user account.
+- The dataset contains historical housing information rather than current market prices.
+- Predictions represent district-level median values, not the exact value of an individual house.
+- Performance on historical test data does not guarantee accuracy in today's housing market.
+- Prediction history currently uses CSV-based storage and is not separated by user account.
 
 ## Future Improvements
 
-- Deploy the application online.
-- Add database-backed prediction history and optional user accounts.
-- Evaluate performance using more recent housing data.
+- Deploy the application to a hosting platform.
+- Introduce database-backed prediction history and optional user authentication.
+- Evaluate the model using more recent housing data.
 - Add automated tests and deployment configuration.
+
+## Author
+
+**Gaurav Kumar**
+
+GitHub: [Gaurav-coder-tech](https://github.com/Gaurav-coder-tech)
+
+## Disclaimer
+
+This project is developed for educational and portfolio purposes. Predictions are estimates generated by a machine learning model and should not be used as professional real estate valuations.
