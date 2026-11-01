@@ -1,0 +1,964 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EstateIQ | California Housing Intelligence</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg: #f6f7fb;
+            --card: #ffffff;
+            --text: #191b31;
+            --muted: #777c91;
+            --purple: #7057f5;
+            --purple-light: #eeeaff;
+            --border: #e9eaf2;
+            --green: #16a579;
+            --shadow: 0 8px 30px rgba(29, 25, 72, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .navbar {
+            height: 76px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            background: var(--purple);
+            color: white;
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .nav-right {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .container {
+            width: min(1450px, 92%);
+            margin: 32px auto 60px;
+        }
+
+        .hero {
+            padding: 38px;
+            border-radius: 24px;
+            background: linear-gradient(120deg, #211a52, #5e47da 65%, #9176ff);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            box-shadow: var(--shadow);
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            font-weight: 800;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: clamp(28px, 4vw, 43px);
+            margin: 13px 0;
+            letter-spacing: -1.4px;
+        }
+
+        .hero p {
+            max-width: 650px;
+            color: #e3dfff;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .hero-pill {
+            border: 1px solid #ffffff55;
+            background: #ffffff17;
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 13px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 32px 0 18px;
+        }
+
+        .section-heading h2 {
+            font-size: 21px;
+            margin: 0;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 13px;
+            margin: 6px 0 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 23px;
+            box-shadow: var(--shadow);
+            min-width: 0;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .metric-value {
+            font-size: clamp(23px, 2.6vw, 32px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin: 13px 0 7px;
+            overflow-wrap: anywhere;
+        }
+
+        .metric-note {
+            font-size: 12px;
+            color: var(--green);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 750;
+            margin: 0 0 7px;
+        }
+
+        .card-description {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 17px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e1ed;
+            border-radius: 10px;
+            background: #fbfbfe;
+            outline: none;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        input:focus {
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px #7057f51c;
+        }
+
+        .field-help {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 22px;
+            border: 0;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(110deg, #7057f5, #9475ff);
+            font-size: 14px;
+            font-weight: 750;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover {
+            filter: brightness(1.05);
+        }
+
+        .prediction-result {
+            margin-top: 20px;
+            padding: 22px;
+            background: var(--purple-light);
+            border-radius: 14px;
+            border: 1px solid #ded6ff;
+        }
+
+        .prediction-result .amount {
+            font-size: 32px;
+            font-weight: 850;
+            color: #5539d4;
+            margin: 9px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .prediction-result p {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #625d82;
+        }
+
+        .notice {
+            margin-bottom: 20px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #fff0ef;
+            color: #a33131;
+            font-size: 13px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .chart-box {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .chart-box.tall {
+            height: 360px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f8f8fc;
+            color: var(--muted);
+            font-weight: 700;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: var(--purple-light);
+            color: #5539d4;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .empty-state {
+            padding: 28px 10px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 35px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 1000px) {
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                padding: 0 4%;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+
+            .grid, .charts-grid, .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .chart-box {
+                height: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a class="brand" href="/">
+            <span class="brand-icon">E</span>
+            <span>EstateIQ</span>
+        </a>
+
+        <div class="nav-right">
+            <span>California Housing Intelligence</span>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <section class="hero">
+            <div>
+                <div class="eyebrow">Machine Learning Dashboard</div>
+                <h1>Smarter Housing Insights.</h1>
+                <p>
+                    Explore California housing data, compare machine learning
+                    models, and estimate a district's median house value using
+                    your trained {{ model_name }} model.
+                </p>
+            </div>
+
+            <div class="hero-pill">
+                ● Model loaded &nbsp; | &nbsp; 8 input features
+            </div>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="notice">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="section-heading">
+            <div>
+                <h2>Model Performance</h2>
+                <p>Metrics calculated on the held-out test set.</p>
+            </div>
+            <div class="hero-pill" style="background:#eeeaff;color:#5539d4;border:0;">
+                {{ model_name }}
+            </div>
+        </div>
+
+        <section class="grid">
+            <div class="card">
+                <div class="metric-label">Mean Absolute Error</div>
+                <div class="metric-value">
+                    {% if metrics.mae is not none %}
+                        ${{ "{:,.0f}".format(metrics.mae) }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+                <div class="metric-note">Average absolute prediction error</div>
+            </div>
+
+            <div class="card">
+                <div class="metric-label">Root Mean Squared Error</div>
+                <div class="metric-value">
+                    {% if metrics.rmse is not none %}
+                        ${{ "{:,.0f}".format(metrics.rmse) }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+                <div class="metric-note">Penalizes larger prediction errors</div>
+            </div>
+
+            <div class="card">
+                <div class="metric-label">R² Score</div>
+                <div class="metric-value">
+                    {% if metrics.r2 is not none %}
+                        {{ "{:.2f}".format(metrics.r2 * 100) }}%
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+                <div class="metric-note">Variance explained by the model</div>
+            </div>
+
+            <div class="card">
+                <div class="metric-label">Saved Predictions</div>
+                <div class="metric-value">{{ history_count }}</div>
+                <div class="metric-note">Predictions in your local history</div>
+            </div>
+        </section>
+
+        <div class="section-heading">
+            <div>
+                <h2>House Price Estimator</h2>
+                <p>Enter the characteristics of a California district.</p>
+            </div>
+        </div>
+
+        <section class="main-grid">
+            <div class="card">
+                <h3 class="card-title">Property & District Details</h3>
+                <p class="card-description">
+                    These inputs describe a census block group, not an
+                    individual home's physical specifications.
+                </p>
+
+                <form action="/predict" method="POST">
+                    <div class="form-grid">
+                        <div>
+                            <label for="MedInc">Median Income</label>
+                            <input id="MedInc" name="MedInc" type="number"
+                                   min="0" step="any" required
+                                   value="{{ submitted_values.get('MedInc', 5.0) if submitted_values else 5.0 }}">
+                            <div class="field-help">Measured in tens of thousands of dollars.</div>
+                        </div>
+
+                        <div>
+                            <label for="HouseAge">Median House Age</label>
+                            <input id="HouseAge" name="HouseAge" type="number"
+                                   min="0" step="any" required
+                                   value="{{ submitted_values.get('HouseAge', 25) if submitted_values else 25 }}">
+                            <div class="field-help">Median age of houses in the district.</div>
+                        </div>
+
+                        <div>
+                            <label for="AveRooms">Average Rooms</label>
+                            <input id="AveRooms" name="AveRooms" type="number"
+                                   min="0.01" step="any" required
+                                   value="{{ submitted_values.get('AveRooms', 5.0) if submitted_values else 5.0 }}">
+                            <div class="field-help">Average rooms per household.</div>
+                        </div>
+
+                        <div>
+                            <label for="AveBedrms">Average Bedrooms</label>
+                            <input id="AveBedrms" name="AveBedrms" type="number"
+                                   min="0.01" step="any" required
+                                   value="{{ submitted_values.get('AveBedrms', 1.0) if submitted_values else 1.0 }}">
+                            <div class="field-help">Average bedrooms per household.</div>
+                        </div>
+
+                        <div>
+                            <label for="Population">Population</label>
+                            <input id="Population" name="Population" type="number"
+                                   min="0" step="any" required
+                                   value="{{ submitted_values.get('Population', 1000) if submitted_values else 1000 }}">
+                            <div class="field-help">Total district population.</div>
+                        </div>
+
+                        <div>
+                            <label for="AveOccup">Average Occupancy</label>
+                            <input id="AveOccup" name="AveOccup" type="number"
+                                   min="0.01" step="any" required
+                                   value="{{ submitted_values.get('AveOccup', 3.0) if submitted_values else 3.0 }}">
+                            <div class="field-help">Average occupants per household.</div>
+                        </div>
+
+                        <div>
+                            <label for="Latitude">Latitude</label>
+                            <input id="Latitude" name="Latitude" type="number"
+                                   min="32" max="42.5" step="any" required
+                                   value="{{ submitted_values.get('Latitude', 34.05) if submitted_values else 34.05 }}">
+                            <div class="field-help">California latitude coordinate.</div>
+                        </div>
+
+                        <div>
+                            <label for="Longitude">Longitude</label>
+                            <input id="Longitude" name="Longitude" type="number"
+                                   min="-125" max="-113" step="any" required
+                                   value="{{ submitted_values.get('Longitude', -118.25) if submitted_values else -118.25 }}">
+                            <div class="field-help">California longitude coordinate.</div>
+                        </div>
+                    </div>
+
+                    <button class="primary-btn" type="submit">
+                        Estimate Median House Value →
+                    </button>
+                </form>
+
+                {% if prediction is defined %}
+                    <div class="prediction-result">
+                        <div class="metric-label">Estimated Median House Value</div>
+                        <div class="amount">${{ "{:,.2f}".format(prediction) }}</div>
+                        <p>
+                            Predicted by {{ model_name }} using the eight
+                            district-level features you entered. This is a
+                            model estimate, not a formal property appraisal.
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Model Comparison</h3>
+                <p class="card-description">
+                    Validation-set MAE. Lower values indicate smaller
+                    average absolute errors.
+                </p>
+
+                {% if comparisons %}
+                    <div class="chart-box tall">
+                        <canvas id="modelChart"></canvas>
+                    </div>
+
+                    <div class="table-wrap" style="margin-top:20px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Validation MAE</th>
+                                    <th>R²</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in comparisons %}
+                                    <tr>
+                                        <td>{{ item.name }}</td>
+                                        <td>${{ "{:,.0f}".format(item.mae) }}</td>
+                                        <td>{{ "{:.3f}".format(item.r2) }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        Run train_model.py to generate validation_results.csv.
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <div class="section-heading">
+            <div>
+                <h2>Test Set Analytics</h2>
+                <p>Visualizations based on the saved held-out test predictions.</p>
+            </div>
+        </div>
+
+        <section class="charts-grid">
+            <div class="card">
+                <h3 class="card-title">Actual vs. Predicted Values</h3>
+                <p class="card-description">
+                    Points closer to the diagonal indicate more accurate predictions.
+                </p>
+                <div class="chart-box">
+                    <canvas id="actualPredictedChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Test Sample Predictions</h3>
+                <p class="card-description">
+                    Compare actual and predicted values for sampled test records.
+                </p>
+                <div class="chart-box">
+                    <canvas id="recentChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card" style="grid-column:1 / -1;">
+                <h3 class="card-title">California Housing Geographic Distribution</h3>
+                <p class="card-description">
+                    Longitude and latitude of sampled test districts. Point
+                    color represents actual median district value. This is a
+                    coordinate scatter plot, not a street or boundary map.
+                </p>
+                <div class="chart-box tall">
+                    <canvas id="geoChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-heading">
+            <div>
+                <h2>Prediction History</h2>
+                <p>Records of predictions made through this website.</p>
+            </div>
+            <a class="download-btn" href="/download-history">
+                Download CSV ↓
+            </a>
+        </div>
+
+        <section class="card">
+            {% if history %}
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Median Income</th>
+                                <th>House Age</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                                <th>Predicted Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in history|reverse %}
+                                <tr>
+                                    <td>{{ item.Timestamp }}</td>
+                                    <td>{{ item.MedInc }}</td>
+                                    <td>{{ item.HouseAge }}</td>
+                                    <td>{{ item.Latitude }}</td>
+                                    <td>{{ item.Longitude }}</td>
+                                    <td>
+${{ "{:,.2f}".format((item.get('PredictedPriceUSD') or item.get('PredictedPrice') or item.get('prediction') or 0)|float) }}                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    No predictions yet. Enter district details above to get started.
+                </div>
+            {% endif %}
+        </section>
+
+        <footer class="footer">
+            <strong>EstateIQ</strong> · California Housing Machine Learning Project
+            <br>
+            Model metrics are calculated on held-out test data.
+            Predictions are estimates and should not be treated as financial advice.
+        </footer>
+    </main>
+
+    <script>
+        const actualValues = {{ actual_values | tojson }};
+        const predictedValues = {{ predicted_values | tojson }};
+
+        const mapLongitudes = {{ map_longitudes | tojson }};
+        const mapLatitudes = {{ map_latitudes | tojson }};
+        const mapValues = {{ map_values | tojson }};
+
+        const comparisons = {{ comparisons | tojson }};
+
+        Chart.defaults.font.family = "Inter, Segoe UI, Arial, sans-serif";
+        Chart.defaults.color = "#777c91";
+
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        usePointStyle: true,
+                        padding: 18
+                    }
+                }
+            }
+        };
+
+        // 1. Validation-set model comparison.
+        const modelCanvas = document.getElementById("modelChart");
+
+        if (modelCanvas && comparisons.length) {
+            new Chart(modelCanvas, {
+                type: "bar",
+                data: {
+                    labels: comparisons.map(item => item.name),
+                    datasets: [{
+                        label: "Validation MAE (USD)",
+                        data: comparisons.map(item => item.mae),
+                        backgroundColor: "#8068f6",
+                        borderRadius: 7
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    indexAxis: "y",
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value =>
+                                    "$" + Number(value).toLocaleString()
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Actual vs. predicted test-set values.
+        const actualPredictedCanvas =
+            document.getElementById("actualPredictedChart");
+
+        if (actualPredictedCanvas && actualValues.length) {
+            const points = actualValues.map((actual, index) => ({
+                x: actual,
+                y: predictedValues[index]
+            }));
+
+            const maximum = Math.max(
+                ...actualValues,
+                ...predictedValues
+            );
+
+            new Chart(actualPredictedCanvas, {
+                type: "scatter",
+                data: {
+                    datasets: [
+                        {
+                            label: "Test observations",
+                            data: points,
+                            backgroundColor: "#8068f699",
+                            pointRadius: 3
+                        },
+                        {
+                            label: "Ideal prediction",
+                            data: [
+                                {x: 0, y: 0},
+                                {x: maximum, y: maximum}
+                            ],
+                            type: "line",
+                            borderColor: "#16a579",
+                            borderDash: [6, 5],
+                            pointRadius: 0,
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        x: {
+                            type: "linear",
+                            title: {
+                                display: true,
+                                text: "Actual value (USD)"
+                            },
+                            ticks: {
+                                callback: value =>
+                                    "$" + Number(value).toLocaleString()
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: "Predicted value (USD)"
+                            },
+                            ticks: {
+                                callback: value =>
+                                    "$" + Number(value).toLocaleString()
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. Actual and predicted values for sampled test observations.
+        const recentCanvas = document.getElementById("recentChart");
+
+        if (recentCanvas && actualValues.length) {
+            new Chart(recentCanvas, {
+                type: "scatter",
+                data: {
+                    datasets: [
+                        {
+                            label: "Actual",
+                            data: actualValues.map((value, index) => ({
+                                x: index + 1,
+                                y: value
+                            })),
+                            backgroundColor: "#16a579",
+                            pointRadius: 3
+                        },
+                        {
+                            label: "Predicted",
+                            data: predictedValues.map((value, index) => ({
+                                x: index + 1,
+                                y: value
+                            })),
+                            backgroundColor: "#8068f6",
+                            pointRadius: 3
+                        }
+                    ]
+                },
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: "Sampled test observation"
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: "House value (USD)"
+                            },
+                            ticks: {
+                                callback: value =>
+                                    "$" + Number(value).toLocaleString()
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 4. Geographic coordinate scatter plot.
+        const geoCanvas = document.getElementById("geoChart");
+
+        if (geoCanvas && mapLongitudes.length) {
+            const minimum = Math.min(...mapValues);
+            const maximum = Math.max(...mapValues);
+
+            const geoPoints = mapLongitudes.map((longitude, index) => {
+                const normalized = maximum === minimum
+                    ? 0.5
+                    : (mapValues[index] - minimum) / (maximum - minimum);
+
+                return {
+                    x: longitude,
+                    y: mapLatitudes[index],
+                    r: 4 + normalized * 5,
+                    value: mapValues[index],
+                    backgroundColor: `rgba(
+                        ${Math.round(80 + normalized * 120)},
+                        ${Math.round(100 - normalized * 35)},
+                        230,
+                        0.7
+                    )`
+                };
+            });
+
+            new Chart(geoCanvas, {
+                type: "bubble",
+                data: {
+                    datasets: [{
+                        label: "Test districts",
+                        data: geoPoints,
+                        backgroundColor: geoPoints.map(point =>
+                            point.backgroundColor
+                        ),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    plugins: {
+                        ...chartOptions.plugins,
+                        tooltip: {
+                            callbacks: {
+                                label: context => {
+                                    const point = context.raw;
+                                    return [
+                                        `Longitude: ${point.x.toFixed(3)}`,
+                                        `Latitude: ${point.y.toFixed(3)}`,
+                                        `Actual value: $${point.value.toLocaleString(
+                                            "en-US",
+                                            {maximumFractionDigits: 0}
+                                        )}`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: "Longitude"
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: "Latitude"
+                            },
+                            reverse: false
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
